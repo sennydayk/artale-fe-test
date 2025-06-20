@@ -1,43 +1,55 @@
+"use client";
+
 import CaseTable from "./components/CaseTable";
 import { CaseApiResponse } from "./types";
+import { useEffect, useState } from "react";
 
-async function getCases(): Promise<CaseApiResponse> {
-  // API를 호출 로직 필요
+export default function CaseListPage() {
+  const [data, setData] = useState<CaseApiResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
-  // mock 데이터
-  return {
-    data: [
-      {
-        id: "case-a1b2c3d4",
-        characterName: "자동사냥꾼1",
-        reason: "REPETITIVE_LOOTING",
-        riskLevel: "CRITICAL",
-        status: "OPEN",
-        createdAt: "2025-06-18T14:30:00Z",
-      },
-      {
-        id: "case-e5f6g7h8",
-        characterName: "스피드스터",
-        reason: "IMPOSSIBLE_MOVEMENT",
-        riskLevel: "CRITICAL",
-        status: "UNDER_REVIEW",
-        createdAt: "2025-06-18T12:15:00Z",
-      },
-      {
-        id: "case-i9j0k1l2",
-        characterName: "골드파머",
-        reason: "REPETITIVE_LOOTING",
-        riskLevel: "HIGH",
-        status: "CLOSED",
-        createdAt: "2025-06-17T09:00:00Z",
-      },
-    ],
-    pagination: { page: 1, pageSize: 20, totalCount: 153, totalPages: 8 },
-  };
-}
+  // 케이스 목록 데이터 불러오기
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch("/api/cases");
+        if (!res.ok) {
+          throw new Error("데이터를 불러오는데 실패했습니다.");
+        }
+        const result: CaseApiResponse = await res.json();
+        setData(result);
+      } catch (e) {
+        setError(e as Error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-export default async function CaseListPage() {
-  const { data: cases, pagination } = await getCases();
+    fetchData();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <main className="container mx-auto p-4 sm:p-6 lg:p-8 text-center">
+        <p>데이터를 불러오는 중입니다...</p>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="container mx-auto p-4 sm:p-6 lg:p-8 text-center text-red-600">
+        <p>에러 발생: {error.message}</p>
+      </main>
+    );
+  }
+
+  if (!data) {
+    return null;
+  }
+
+  const { data: cases, pagination } = data;
 
   return (
     <main className="container mx-auto p-4 sm:p-6 lg:p-8">

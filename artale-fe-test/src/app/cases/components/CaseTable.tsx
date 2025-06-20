@@ -7,6 +7,10 @@ interface CaseTableProps {
 const reasonMap: { [key: string]: string } = {
   REPETITIVE_LOOTING: "반복적 아이템 뺏기",
   IMPOSSIBLE_MOVEMENT: "비정상적 이동",
+  CHEAT_INJECTION: "치트 주입",
+  PROGRESS_BLOCKING: "성장 방해 행위",
+  ECONOMY_DISRUPTION: "경제 교란 행위",
+  TRADE_EXPLOITATION: "거래 시스템 악용",
 };
 
 const riskLevelMap: {
