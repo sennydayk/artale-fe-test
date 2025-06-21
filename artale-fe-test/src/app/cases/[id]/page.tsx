@@ -1,7 +1,8 @@
 import CaseDetailInfo from "./components/CaseDetail";
-import { CaseDetail } from "../types";
+import { CaseDetail, Note } from "../types";
 import Link from "next/link";
 import CaseLogsWrapper from "./components/CaseLogsWrapper";
+import OperatorNote from "./components/OperatorNote";
 
 async function getCaseDetail(caseId: string): Promise<CaseDetail | null> {
   try {
@@ -22,12 +23,31 @@ async function getCaseDetail(caseId: string): Promise<CaseDetail | null> {
   }
 }
 
+async function getCaseNotes(caseId: string): Promise<Note[] | null> {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/cases/${caseId}/notes`,
+      {
+        cache: "no-store",
+      }
+    );
+    if (!res.ok) {
+      return null;
+    }
+    return res.json();
+  } catch (error) {
+    console.error("Failed to fetch case notes:", error);
+    return null;
+  }
+}
+
 export default async function CaseDetailPage({
   params,
 }: {
   params: { id: string };
 }) {
   const caseDetail = await getCaseDetail(params.id);
+  const caseNotes = await getCaseNotes(params.id);
 
   if (!caseDetail) {
     return (
@@ -62,6 +82,13 @@ export default async function CaseDetailPage({
       <div className="my-8 border-t border-gray-200"></div>
 
       <CaseLogsWrapper caseId={params.id} />
+
+      {caseNotes && caseNotes.length > 0 && (
+        <>
+          <div className="my-8 border-t border-gray-200"></div>
+          <OperatorNote note={caseNotes[0]} />
+        </>
+      )}
     </main>
   );
 }

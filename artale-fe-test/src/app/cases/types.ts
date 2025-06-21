@@ -42,3 +42,10 @@ export interface LogApiResponse {
   data: LogEntry[];
   pagination: Pagination;
 }
+
+export interface Note {
+  noteId: number;
+  author: string;
+  content: string;
+  createdAt: string;
+}
