@@ -10,6 +10,22 @@ export interface Case {
   createdAt: string;
 }
 
+export interface CaseDetail extends Case {
+  userId: number;
+  summary: {
+    [key: string]: string | number;
+  };
+}
+
+export interface LogEntry {
+  logId: number;
+  timestamp: string;
+  actionType: string;
+  details: {
+    [key: string]: string | number;
+  };
+}
+
 export interface Pagination {
   page: number;
   pageSize: number;
@@ -20,4 +36,16 @@ export interface Pagination {
 export interface CaseApiResponse {
   data: Case[];
   pagination: Pagination;
+}
+
+export interface LogApiResponse {
+  data: LogEntry[];
+  pagination: Pagination;
+}
+
+export interface Note {
+  noteId: number;
+  author: string;
+  content: string;
+  createdAt: string;
 }
