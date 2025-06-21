@@ -1,4 +1,5 @@
 import { Case, CaseStatus, RiskLevel } from "../types";
+import { useRouter } from "next/navigation";
 
 interface CaseTableProps {
   cases: Case[];
@@ -41,6 +42,12 @@ const formatDate = (dateString: string) => {
 };
 
 export default function CaseTable({ cases }: CaseTableProps) {
+  const router = useRouter();
+
+  const handleRowClick = (caseId: string) => {
+    router.push(`/cases/${caseId}`);
+  };
+
   return (
     <div className="rounded-lg border overflow-hidden">
       <table className="min-w-full bg-white text-sm">
@@ -62,7 +69,11 @@ export default function CaseTable({ cases }: CaseTableProps) {
         </thead>
         <tbody className="divide-y divide-gray-200">
           {cases.map((caseItem) => (
-            <tr key={caseItem.id} className="hover:bg-gray-50">
+            <tr
+              key={caseItem.id}
+              className="hover:bg-gray-50 cursor-pointer"
+              onClick={() => handleRowClick(caseItem.id)}
+            >
               <td className="p-4 font-mono text-gray-700">{caseItem.id}</td>
               <td className="p-4 font-medium text-gray-900">
                 {caseItem.characterName}
