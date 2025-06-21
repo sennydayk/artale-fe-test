@@ -1,7 +1,7 @@
 import {
-  getMockCaseDetail,
-  updateMockCaseStatus,
-} from "../../../../../lib/mock-data/case-details";
+  getCaseById,
+  updateCaseStatus,
+} from "../../../../../lib/mock-data/store";
 import { NextRequest, NextResponse } from "next/server";
 import { CaseStatus } from "@/app/cases/types";
 
@@ -11,7 +11,7 @@ export async function GET(
   { params }: { params: { caseId: string } }
 ) {
   const { caseId } = params;
-  const caseDetail = getMockCaseDetail(caseId);
+  const caseDetail = getCaseById(caseId);
 
   if (!caseDetail) {
     return NextResponse.json({ message: "Case not found" }, { status: 404 });
@@ -36,7 +36,7 @@ export async function PATCH(
     );
   }
 
-  const updatedCase = updateMockCaseStatus(caseId, status);
+  const updatedCase = updateCaseStatus(caseId, status);
 
   if (!updatedCase) {
     return NextResponse.json({ message: "Case not found" }, { status: 404 });
