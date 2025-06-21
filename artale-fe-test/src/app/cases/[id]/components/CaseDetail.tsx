@@ -5,6 +5,7 @@ import {
   formatDate,
 } from "../../components/CaseTable.util";
 import { CaseDetail } from "../../types";
+import CaseStatusUpdater from "./CaseStatusUpdater";
 
 interface CaseDetailProps {
   caseDetail: CaseDetail;
@@ -30,7 +31,7 @@ export default function CaseDetailInfo({ caseDetail }: CaseDetailProps) {
     <div className="space-y-8">
       <div>
         <h2 className="text-xl font-bold text-gray-800 mb-4">케이스 정보</h2>
-        <div className="rounded-lg border overflow-hidden">
+        <div className="rounded-lg border">
           <table className="min-w-full bg-white text-sm">
             <tbody>
               {renderDetailRow(
@@ -53,7 +54,13 @@ export default function CaseDetailInfo({ caseDetail }: CaseDetailProps) {
                   {riskLevelMap[caseDetail.riskLevel].text}
                 </span>
               )}
-              {renderDetailRow("상태", statusMap[caseDetail.status])}
+              {renderDetailRow(
+                "상태",
+                <CaseStatusUpdater
+                  caseId={caseDetail.id}
+                  currentStatus={caseDetail.status}
+                />
+              )}
               {renderDetailRow("생성 일시", formatDate(caseDetail.createdAt))}
             </tbody>
           </table>

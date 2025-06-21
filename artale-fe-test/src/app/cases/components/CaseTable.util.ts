@@ -19,9 +19,9 @@ export const riskLevelMap: {
 };
 
 export const statusMap: { [key in CaseStatus]: string } = {
-  OPEN: "처리 전",
-  UNDER_REVIEW: "처리 중",
-  CLOSED: "처리 완료",
+  OPEN: "검토 전",
+  UNDER_REVIEW: "검토 중",
+  CLOSED: "조치 완료",
 };
 
 export const formatDate = (dateString: string) => {
