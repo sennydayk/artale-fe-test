@@ -10,6 +10,13 @@ export interface Case {
   createdAt: string;
 }
 
+export interface CaseDetail extends Case {
+  userId: number;
+  summary: {
+    [key: string]: string | number;
+  };
+}
+
 export interface Pagination {
   page: number;
   pageSize: number;
