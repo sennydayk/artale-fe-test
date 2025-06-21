@@ -5,6 +5,13 @@ import {
   CaseApiResponse,
 } from "@/app/cases/types";
 
+const createSeededRandom = (seed: number) => {
+  return () => {
+    seed = (seed * 1103515245 + 12345) % 2147483648;
+    return seed / 2147483648;
+  };
+};
+
 const REASONS = [
   "REPETITIVE_LOOTING",
   "IMPOSSIBLE_MOVEMENT",
@@ -17,33 +24,32 @@ const REASONS = [
 const RISK_LEVELS: RiskLevel[] = ["CRITICAL", "HIGH", "MEDIUM", "LOW"];
 const STATUSES: CaseStatus[] = ["OPEN", "UNDER_REVIEW", "CLOSED"];
 
-// 랜덤 ID 생성 문자열 배열
-const ALPHABETS = "abcdefghijklmnopqrstuvwxyz".split("");
-const NUMBERS = "0123456789".split("");
-
-// 각 배열에서 랜덤 요소를 뽑는 함수
-const getRandomElement = <T>(arr: T[]): T =>
-  arr[Math.floor(Math.random() * arr.length)];
-
 // 단일 목데이터 생성 함수
 const generateMockCase = (index: number): Case => {
+  const seededRandom = createSeededRandom(index + 1);
+
+  const getRandomElement = <T>(arr: T[]): T =>
+    arr[Math.floor(seededRandom() * arr.length)];
+
   // 랜덤 ID 생성 (문자, 숫자 번갈아 8자리)
   const generateRandomIdPart = () => {
+    const ALPHABETS = "abcdefghijklmnopqrstuvwxyz".split("");
+    const NUMBERS = "0123456789".split("");
     let result = "";
     for (let i = 0; i < 4; i++) {
-      result += getRandomElement(ALPHABETS);
-      result += getRandomElement(NUMBERS);
+      result += ALPHABETS[Math.floor(seededRandom() * ALPHABETS.length)];
+      result += NUMBERS[Math.floor(seededRandom() * NUMBERS.length)];
     }
     return result;
   };
+
   const id = `case-${generateRandomIdPart()}`;
-  // 캐릭터 이름 지정
   const characterName = `플레이어${String(index + 1).padStart(3, "0")}`;
 
   const now = new Date();
   // 최근 30일 중 랜덤하게 설정
   const randomPastDate = new Date(
-    now.getTime() - Math.random() * 30 * 24 * 60 * 60 * 1000
+    now.getTime() - seededRandom() * 30 * 24 * 60 * 60 * 1000
   );
 
   // 객체로 리턴

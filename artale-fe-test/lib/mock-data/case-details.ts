@@ -25,3 +25,15 @@ export const mockCaseDetails: CaseDetail[] = allCases.map((c) => ({
 export const getMockCaseDetail = (id: string): CaseDetail | undefined => {
   return mockCaseDetails.find((c) => c.id === id);
 };
+
+export const updateMockCaseStatus = (
+  id: string,
+  status: any
+): CaseDetail | undefined => {
+  const caseIndex = mockCaseDetails.findIndex((c) => c.id === id);
+  if (caseIndex === -1) {
+    return undefined;
+  }
+  mockCaseDetails[caseIndex].status = status;
+  return mockCaseDetails[caseIndex];
+};

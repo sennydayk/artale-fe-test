@@ -1,6 +1,11 @@
-import { getMockCaseDetail } from "lib/mock-data/case-details";
+import {
+  getMockCaseDetail,
+  updateMockCaseStatus,
+} from "../../../../../lib/mock-data/case-details";
 import { NextRequest, NextResponse } from "next/server";
+import { CaseStatus } from "@/app/cases/types";
 
+// GET /api/cases/{caseId}
 export async function GET(
   request: NextRequest,
   { params }: { params: { caseId: string } }
@@ -13,4 +18,29 @@ export async function GET(
   }
 
   return NextResponse.json(caseDetail);
+}
+
+// PATCH /api/cases/{caseId}
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: { caseId: string } }
+) {
+  const { caseId } = params;
+  const body = await request.json();
+  const status: CaseStatus = body.status;
+
+  if (!status) {
+    return NextResponse.json(
+      { message: "Status is required" },
+      { status: 400 }
+    );
+  }
+
+  const updatedCase = updateMockCaseStatus(caseId, status);
+
+  if (!updatedCase) {
+    return NextResponse.json({ message: "Case not found" }, { status: 404 });
+  }
+
+  return NextResponse.json(updatedCase);
 }
