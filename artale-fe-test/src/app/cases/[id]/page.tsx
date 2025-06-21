@@ -1,6 +1,7 @@
 import CaseDetailInfo from "./components/CaseDetail";
 import { CaseDetail } from "../types";
 import Link from "next/link";
+import CaseLogsWrapper from "./components/CaseLogsWrapper";
 
 async function getCaseDetail(caseId: string): Promise<CaseDetail | null> {
   try {
@@ -57,6 +58,10 @@ export default async function CaseDetailPage({
         </p>
       </div>
       <CaseDetailInfo caseDetail={caseDetail} />
+
+      <div className="my-8 border-t border-gray-200"></div>
+
+      <CaseLogsWrapper caseId={params.id} />
     </main>
   );
 }
